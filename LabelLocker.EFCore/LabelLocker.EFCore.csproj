@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\Images\LabelLocker.png">
+        <None Include="..\Images\LabelLocker.jpg">
             <Pack>True</Pack>
             <PackagePath></PackagePath>
             <Link>LabelLocker.png</Link>

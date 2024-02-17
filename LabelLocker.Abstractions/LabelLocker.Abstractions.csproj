@@ -14,7 +14,7 @@
         <RepositoryUrl>https://github.com/richard-doucet75/LabelLocker</RepositoryUrl>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="..\Images\LabelLocker.png">
+        <None Include="..\Images\LabelLocker.jpg">
             <Pack>True</Pack>
             <PackagePath></PackagePath>
             <Link>LabelLocker.png</Link>
