@@ -1,0 +1,21 @@
+@startuml
+!theme blueprint
+actor Client
+participant "LabelService" as Service
+participant "LabelRepository" as Repo
+database DB
+
+Client -> Service: ReleaseLabelAsync(label, rowVersion)
+Service -> Repo: Find label
+Repo -> DB: Query label
+DB -> Repo: Label details
+alt Label is reserved and RowVersion matches
+    Repo -> DB: Update label to Available
+    DB -> Repo: Success
+    Repo -> Service: True
+    Service -> Client: Success
+else Label not reserved or RowVersion mismatch
+    Repo -> Service: False
+    Service -> Client: Failure
+end
+@enduml

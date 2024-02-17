@@ -27,6 +27,11 @@ public class LabelService : ILabelService
     /// <returns>True if the label was successfully reserved, false otherwise (e.g., if the label is already reserved or there's a RowVersion mismatch).</returns>
     public async Task<bool> ReserveLabelAsync(string label, byte[] clientRowVersion)
     {
+        if (string.IsNullOrWhiteSpace(label))
+        {
+            throw new ArgumentException("Label name cannot be null or whitespace.");
+        }
+        
         var labelEntity = await _labelRepository.FindLabelAsync(label);
         if (labelEntity == null)
         {
@@ -35,7 +40,8 @@ public class LabelService : ILabelService
             return await _labelRepository.UpdateLabelAsync(labelEntity);
         }
 
-        if (!labelEntity.RowVersion.SequenceEqual(clientRowVersion))
+        if (!labelEntity.RowVersion.SequenceEqual(clientRowVersion)
+            || labelEntity.State == LabelState.Reserved)
         {
             return false; // Concurrency conflict
         }

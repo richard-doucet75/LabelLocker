@@ -1,0 +1,28 @@
+@startuml
+!theme blueprint
+
+actor Client
+participant "LabelService" as Service
+participant "LabelRepository" as Repo
+database DB
+
+Client -> Service: ReserveLabelAsync(label, rowVersion)
+alt Label does not exist
+    Service -> Repo: Insert new label
+    Repo -> DB: Add label
+    DB -> Repo: Success
+    Repo -> Service: True
+    Service -> Client: Success
+else Label exists
+    Service -> Repo: Check RowVersion & Update
+    alt RowVersion matches
+        Repo -> DB: Update label
+        DB -> Repo: Success
+        Repo -> Service: True
+        Service -> Client: Success
+    else RowVersion mismatch
+        Repo -> Service: False
+        Service -> Client: Failure (Concurrency conflict)
+    end
+end
+@enduml
