@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelLocker.Lib", "LabelLocker.Lib\LabelLocker.Lib.csproj", "{323FBC6B-1C56-49D9-A5DA-B7E60B97A83B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelLocker", "LabelLocker\LabelLocker.csproj", "{323FBC6B-1C56-49D9-A5DA-B7E60B97A83B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelLocker.Abstractions", "LabelLocker.Abstractions\LabelLocker.Abstractions.csproj", "{DA4B1BE7-6416-4735-B2E7-75C7F18CB3DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelLocker.EFCore", "LabelLocker.EFCore\LabelLocker.EFCore.csproj", "{E6E6F04A-09BF-49F7-8254-EB2A95027CF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +22,13 @@ Global
 		{323FBC6B-1C56-49D9-A5DA-B7E60B97A83B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{323FBC6B-1C56-49D9-A5DA-B7E60B97A83B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{323FBC6B-1C56-49D9-A5DA-B7E60B97A83B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA4B1BE7-6416-4735-B2E7-75C7F18CB3DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA4B1BE7-6416-4735-B2E7-75C7F18CB3DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA4B1BE7-6416-4735-B2E7-75C7F18CB3DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA4B1BE7-6416-4735-B2E7-75C7F18CB3DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6E6F04A-09BF-49F7-8254-EB2A95027CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6E6F04A-09BF-49F7-8254-EB2A95027CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6E6F04A-09BF-49F7-8254-EB2A95027CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6E6F04A-09BF-49F7-8254-EB2A95027CF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
