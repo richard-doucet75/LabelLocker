@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright (c) 2024 Richard Doucet</Copyright>
     <PackageProjectUrl>https://github.com/richard-doucet75/LabelLocker</PackageProjectUrl>
-    <PackageIcon>LabelLocker.png</PackageIcon>
+    <PackageIcon>LabelLocker.jpg</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/richard-doucet75/LabelLocker</RepositoryUrl>
