@@ -20,7 +20,7 @@ public class LabelContext : DbContext
     /// <summary>
     /// Gets or sets the DbSet for <see cref="LabelEntity"/> entities.
     /// </summary>
-    public DbSet<LabelEntity> Labels { get; set; }
+    public DbSet<LabelEntity> Labels { get; set; } = null!;
 
     // If you have overridden any DbContext methods like OnModelCreating, you can document those here as well.
     /// <summary>

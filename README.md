@@ -1,72 +1,77 @@
 # LabelLocker
 
-## Overview
+LabelLocker is a .NET library designed to manage and ensure the uniqueness of labels or identifiers across different entities in your applications. With built-in support for Entity Framework Core (EFCore) and an abstraction layer for custom repository implementations, LabelLocker is highly adaptable to various data storage strategies. It also implements optimistic concurrency control to manage concurrent operations on labels efficiently.
 
-LabelLocker is a .NET library crafted to manage the uniqueness of strings across various applications or contexts in a disconnected architecture, without direct dependency on specific database tables or columns. Utilizing the robustness of Entity Framework Core, it offers an efficient way to ensure string uniqueness (e.g., usernames, product codes) and simplifies CRUD operations on label entities. LabelLocker is perfect for projects that demand flexible and reliable management of unique identifiers.
+## Key Features
 
-## Features
-
-- **String Uniqueness Management**: Guarantees string uniqueness across different applications or parts of an application.
-- **CRUD Operations**: Streamlines creating, reading, updating, and deleting label entities through a simplified interface.
-- **Disconnected Operation**: Functions independently from specific database structures, offering architectural flexibility.
-- **Entity Framework Core Support**: Built on EF Core to provide strong data access capabilities and support for various database providers.
+- **Unique Label Management**: Safely reserve and release labels to ensure uniqueness across entities.
+- **EFCore Integration**: Leverage Entity Framework Core for seamless integration with relational databases.
+- **Custom Repository Support**: Extend LabelLocker with custom repositories to fit any data access strategy.
+- **Concurrency Handling**: Manage concurrent operations with built-in optimistic concurrency control.
+- **Case Insensitivity**: Label names are treated case-insensitively, ensuring "LABEL" and "label" are considered the same.
 
 ## Getting Started
 
-### Prerequisites
-
-- .NET 5.0 SDK or newer.
-- An existing .NET project or the setup for a new one.
-- Familiarity with Entity Framework Core is beneficial.
-
 ### Installation
 
-Add LabelLocker as a dependency to your project using NuGet:
-
 ```bash
-dotnet add package LabelLocker --version <version_number>
+dotnet add package LabelLocker
 ```
-
-Ensure to replace `<version_number>` with the actual version you intend to use.
 
 ### Configuration
 
-1. **Configure DbContext**: Make sure your project's `DbContext` is configured to connect to your database. LabelLocker will utilize this context.
-
-2. **Register Services**: In the `Startup.cs` of your ASP.NET Core application, register LabelLocker services:
+1. **EFCore Setup**: Ensure EFCore is configured in your project to use LabelLocker with your database of choice.
+2. **Integrate LabelLocker**: Add the `LabelEntity` to your `DbContext`:
 
 ```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddLabelManagementEntityFrameworkRepositories(Configuration.GetConnectionString("YourConnectionString"));
-    services.AddLabelManagementServices();
-}
+public DbSet<LabelEntity> Labels { get; set; }
 ```
 
-Change `"YourConnectionString"` to your actual database connection string defined in `appsettings.json`.
+3. **Database Migration**: Apply migrations to create the necessary table for label management:
+
+```bash
+dotnet ef migrations add AddLabelEntities
+dotnet ef database update
+```
 
 ## Usage
 
-### Reserve a Label
-
-To ensure a label's uniqueness:
+Reserve a label:
 
 ```csharp
-var isSuccess = await labelService.ReserveLabelAsync("myUniqueLabel", clientRowVersion);
+var reservationResult = await labelService.ReserveLabelAsync("MyUniqueLabel");
+if (reservationResult.Success)
+{
+    var token = reservationResult.ReservationToken;
+    // Handle success
+}
 ```
 
-### Release a Label
-
-To make a reserved label available again:
+Release a label:
 
 ```csharp
-var isSuccess = await labelService.ReleaseLabelAsync("myUniqueLabel", clientRowVersion);
+var releaseResult = await labelService.ReleaseLabelAsync("MyUniqueLabel", token);
+if (releaseResult.Success)
+{
+    // Label released successfully
+}
+```
+
+## Custom Repository Implementation
+
+Create a custom repository by implementing the `ILabelRepository` interface if you prefer using a different ORM or data access strategy than EFCore.
+
+```csharp
+public class CustomLabelRepository : ILabelRepository
+{
+    // Custom implementation
+}
 ```
 
 ## Contributing
 
-We warmly welcome contributions to the LabelLocker project. Whether it's bug reports, feature requests, or code contributions, please visit [our GitHub repository](https://github.com/richard-doucet75/LabelLocker) to get started. See the CONTRIBUTING.md file for more details on how to contribute.
+Contributions are welcome! Feel free to fork the repository, submit pull requests, or report issues.
 
 ## License
 
-LabelLocker is made available under the MIT License. For more details, see the [LICENSE](https://github.com/richard-doucet75/LabelLocker/blob/main/LICENSE) file in the repository.
+LabelLocker is distributed under the MIT License. See the [LICENSE](LICENSE) file for more details.

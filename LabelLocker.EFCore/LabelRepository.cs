@@ -5,57 +5,68 @@ using Microsoft.EntityFrameworkCore;
 namespace LabelLocker.EFCore;
 
 /// <summary>
-/// Repository for performing operations on label entities within the database.
+/// Represents a repository for managing label entities using Entity Framework Core.
 /// </summary>
 public class LabelRepository : ILabelRepository
 {
     private readonly LabelContext _context;
-
+    
     /// <summary>
-    /// Initializes a new instance of the LabelRepository class.
+    /// Initializes a new instance of the <see cref="LabelRepository"/> class.
     /// </summary>
     /// <param name="context">The database context to be used for label operations.</param>
     public LabelRepository(LabelContext context)
     {
         _context = context;
     }
-
+    
     /// <summary>
-    /// Finds a label by its name asynchronously.
+    /// Asynchronously finds a label by its name.
     /// </summary>
     /// <param name="label">The name of the label to find.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the found LabelEntity or null if no label is found.</returns>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the found <see cref="LabelEntity"/> or null if no label is found.</returns>
+
     public async Task<LabelEntity?> FindLabelAsync(string label)
     {
-        return await _context.Labels.AsNoTracking().FirstOrDefaultAsync(l => l.Name == label);
+        return await _context
+            .Labels
+            .AsNoTracking()
+            .FirstOrDefaultAsync(l => l.Name == label);
     }
 
     /// <summary>
-    /// Updates a label entity in the database asynchronously. If the entity does not exist, it is added.
+    /// Asynchronously adds a new label or updates an existing label in the database.
     /// </summary>
-    /// <param name="labelEntity">The label entity to update or add.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result is true if the update or addition was successful, false if a concurrency conflict occurred.</returns>
-    public async Task<bool> UpdateLabelAsync(LabelEntity labelEntity)
+    /// <param name="labelEntity">The label entity to add or update.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the reservation token of the label if the operation is successful; null if a concurrency conflict occurs.</returns>
+    public async Task<byte[]?> AddOrUpdateLabelAsync(LabelEntity labelEntity)
     {
-        var existingEntity = await _context.Labels.FirstOrDefaultAsync(l => l.Id == labelEntity.Id);
-        if (existingEntity != null)
+        var existingEntity =
+            await _context
+                .Labels
+                .FirstOrDefaultAsync(l => l.Name == labelEntity.Name);
+
+        if (existingEntity == null)
         {
-            _context.Entry(existingEntity).CurrentValues.SetValues(labelEntity);
-            _context.Entry(existingEntity).State = EntityState.Modified;
+            _context.Labels.Add(labelEntity);
         }
         else
         {
-            _context.Labels.Add(labelEntity);
+            _context.Entry(existingEntity).CurrentValues.SetValues(labelEntity);
+            
+            // Ensure state is explicitly updated.
+            existingEntity.State = labelEntity.State; 
         }
 
         try
         {
             await _context.SaveChangesAsync();
-            return true; // Changes saved successfully.
+            return (existingEntity ?? labelEntity).ReservationToken;
         }
         catch (DbUpdateConcurrencyException)
         {
-            return false; // Concurrency conflict detected.
+            // Indicate a concurrency conflict.
+            return null; 
         }
     }
 }

@@ -8,5 +8,5 @@ public class LabelEntity
     public required string Name { get; set; }
     public LabelState State { get; set; }
     [Timestamp]
-    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
+    public byte[] ReservationToken { get; set; } = Array.Empty<byte>();
 }
